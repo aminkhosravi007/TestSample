@@ -1,0 +1,25 @@
+﻿@model IEnumerable<BlogPost>
+
+@foreach (var post in Model)
+{
+    <tr>
+        <td>@post.Title</td>
+        <td>@post.Content</td>
+        <td>
+            @if (post.Tags != null && post.Tags.Any())
+            {
+                @string.Join(", ", post.Tags.Select(t => t.Name))
+            }
+            else
+            {
+                <i>No Tags</i>
+            }
+        </td>
+        <td>
+            <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal-@post.Id">Edit</button>
+            <form method="post" asp-action="Delete" asp-route-id="@post.Id" class="d-inline">
+                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+            </form>
+        </td>
+    </tr>
+}
