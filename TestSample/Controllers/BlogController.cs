@@ -23,7 +23,7 @@ namespace TestSample.Controllers
         }
         public IActionResult Create()
         {
-            ViewBag.Tags = new SelectList(_context.Tags, "Id", "Name");
+            //ViewBag.Tags = new SelectList(_context.Tags, "Id", "Name");
             return View();
         }
         [HttpPost]
@@ -42,7 +42,7 @@ namespace TestSample.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Tags = new SelectList(_context.Tags, "Id", "Name");
+            //ViewBag.Tags = new SelectList(_context.Tags, "Id", "Name");
             return View(blogPost);
         }
         public IActionResult FilterByTag(string tag)
@@ -70,7 +70,7 @@ namespace TestSample.Controllers
 
             if (blogPost == null) return NotFound();
 
-            ViewBag.Tags = new MultiSelectList(_context.Tags, "Id", "Name", blogPost.Tags.Select(t => t.Id));
+            //ViewBag.Tags = new MultiSelectList(_context.Tags, "Id", "Name", blogPost.Tags.Select(t => t.Id));
             return View(blogPost);
         }
         [HttpPost]
@@ -106,7 +106,7 @@ namespace TestSample.Controllers
                 }
             }
 
-            ViewBag.Tags = new SelectList(_context.Tags, "Id", "Name");
+            //ViewBag.Tags = new SelectList(_context.Tags, "Id", "Name");
             return View(blogPost);
         }
         public async Task<IActionResult> Delete(int? id)

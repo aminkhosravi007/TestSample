@@ -16,7 +16,6 @@
     <input type="text" id="tagFilter" class="form-control" placeholder="Type a tag to filter posts..." />
 </div>
 
-<!-- Button to trigger the Create modal -->
 <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createModal">Create New Post</button>
 
 <table id="blogTable" class="table table-bordered">
@@ -78,11 +77,13 @@
                         <div class="mb-3">
                             <label for="Tags-@post.Id" class="form-label">Tags</label>
                             <select class="form-select" id="Tags-@post.Id" name="selectedTags" multiple>
-                                @if (ViewBag.Tags != null)
-                                {
-                                    foreach (var tag in ViewBag.Tags as SelectList)
+                                @{
+                                    var selectedTags = post.Tags.Select(tag => tag.Id).ToList();
+
+                                    foreach (var tag in tags)
                                     {
-                                        @* <option value="@tag.Value" @(tag.Selected ? "selected" : "")>@tag.Text</option> *@
+                                        var isSelected = selectedTags.Contains(tag.Id);
+                                        <option value="@tag.Id" class="@(isSelected ? "selected-tag" : "")">@tag.Name</option>
                                     }
                                 }
                             </select>
@@ -97,6 +98,7 @@
         </div>
     </div>
 }
+
 <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
