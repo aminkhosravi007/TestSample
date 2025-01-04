@@ -1,7 +1,12 @@
-﻿@model IEnumerable<BlogPost>
+﻿@using TestSample.Data;
+@model IEnumerable<BlogPost>
+@inject ApplicationDbContext context
 
 @{
     ViewData["Title"] = "Blog Posts";
+}
+@{
+    var tags = context.Tags.ToList();
 }
 
 <h1>Blog Posts</h1>
@@ -50,6 +55,89 @@
         }
     </tbody>
 </table>
+
+@foreach (var post in Model)
+{
+    <div class="modal fade" id="editModal-@post.Id" tabindex="-1" aria-labelledby="editModalLabel-@post.Id" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="post" asp-action="Edit" asp-route-id="@post.Id">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel-@post.Id">Edit Post</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="Title-@post.Id" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="Title-@post.Id" name="Title" value="@post.Title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Content-@post.Id" class="form-label">Content</label>
+                            <textarea class="form-control" id="Content-@post.Id" name="Content" rows="4" required>@post.Content</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Tags-@post.Id" class="form-label">Tags</label>
+                            <select class="form-select" id="Tags-@post.Id" name="selectedTags" multiple>
+                                @if (ViewBag.Tags != null)
+                                {
+                                    foreach (var tag in ViewBag.Tags as SelectList)
+                                    {
+                                        @* <option value="@tag.Value" @(tag.Selected ? "selected" : "")>@tag.Text</option> *@
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-action="Create">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createModalLabel">Create New Post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Title -->
+                    <div class="mb-3">
+                        <label for="Title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="Title" name="Title" required>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="mb-3">
+                        <label for="Content" class="form-label">Content</label>
+                        <textarea class="form-control" id="Content" name="Content" rows="4" required></textarea>
+                    </div>
+
+                    <!-- Tags -->
+                    <div class="mb-3">
+                        <label for="Tags" class="form-label">Tags</label>
+                        <select class="form-select" id="Tags" name="selectedTags" multiple>
+                            @foreach (var tag in tags)
+                            {
+                                <option value="@tag.Id">@tag.Name</option>
+                            }
+                        </select>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Create Post</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 @section Scripts{
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
